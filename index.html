@@ -15,9 +15,50 @@
     <div class="card">
         <h2>ALIET Login</h2>
         <p>Student Strategy App</p>
-        <input type="text" placeholder="Registration Number">
+        <input type="text" id="regNo" placeholder="Registration Number">
         <input type="password" placeholder="Password">
-        <button onclick="alert('System Starting...')">Login</button>
+        <button onclick="handleLogin()">Login</button>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // MAVA IKKADA NEE CONFIG PASTE CHEY
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "student-strategy-app.firebaseapp.com",
+            projectId: "student-strategy-app",
+            storageBucket: "student-strategy-app.appspot.com",
+            messagingSenderId: "YOUR_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Login function
+        window.handleLogin = async function() {
+            const regNoValue = document.getElementById('regNo').value;
+            
+            if (regNoValue === "") {
+                alert("Please enter Registration Number");
+                return;
+            }
+
+            try {
+                // Database lo 'students' ane collection lo registration number tho data save chesthunnam
+                await setDoc(doc(db, "students", regNoValue), {
+                    registrationNumber: regNoValue,
+                    lastLogin: new Date().toLocaleString(),
+                    college: "ALIET"
+                });
+                alert("Mava Success! Data saved in Firebase for: " + regNoValue);
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                alert("Error: Data save avvaledu. Rules check chey.");
+            }
+        };
+    </script>
 </body>
 </html>
