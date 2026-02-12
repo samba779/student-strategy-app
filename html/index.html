@@ -44,7 +44,7 @@
                 
                 const userDoc = await getDoc(doc(db, "Users", user.uid));
                 if (userDoc.exists() && userDoc.data().role === 'teacher') {
-                    window.location.href = "teacher_dashboard.html"; 
+                    window.location.href = "teacherdashbord.html"; 
                 } else {
                     alert("Access Denied: Not a Teacher account!");
                 }
