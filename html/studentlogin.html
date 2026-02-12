@@ -1,0 +1,6 @@
+// Change the logic part in student-login.html to:
+if (userDoc.exists() && userDoc.data().role === 'student') {
+    window.location.href = "student_dashboard.html"; 
+} else {
+    alert("Access Denied: Use Faculty Portal for Teacher accounts!");
+}
