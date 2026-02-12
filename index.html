@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ALIET - Student Strategy App</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #2c3e50, #3498db); height: 100vh; margin: 0; display: flex; justify-content: center; align-items: center; color: white; }
+        .welcome-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 50px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        h1 { margin-bottom: 10px; font-size: 2.5rem; }
+        p { margin-bottom: 30px; opacity: 0.8; }
+        .btn-container { display: flex; gap: 20px; justify-content: center; }
+        .btn { padding: 15px 30px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-student { background: #f1c40f; color: #2c3e50; }
+        .btn-faculty { background: #ffffff; color: #2c3e50; }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+    <div class="welcome-card">
+        <h1>Welcome to ALIET</h1>
+        <p>Smart Attendance Tracking System</p>
+        <div class="btn-container">
+            <a href="studentlogin.html" class="btn btn-student">Login as Student</a>
+            <a href="techerloginpage.html" class="btn btn-faculty">Login as Faculty</a>
+        </div>
+    </div>
+</body>
+</html>
