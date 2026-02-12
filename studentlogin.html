@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teacher Login</title>
+    <title>Student Login</title>
     <style>
-        body { font-family: Arial; text-align: center; padding-top: 100px; }
-        form { display: inline-block; background: #fff; padding: 20px; border: 1px solid #ccc; }
-        input { display: block; margin: 10px auto; padding: 10px; width: 250px; }
-        button { padding: 10px 20px; background: #1a73e8; color: white; border: none; cursor: pointer; }
+        body { font-family: Arial; text-align: center; padding-top: 100px; background: #f0f2f5; }
+        form { display: inline-block; background: #fff; padding: 30px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { display: block; margin: 10px auto; padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #1a73e8; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        button:hover { background: #1557b0; }
     </style>
 </head>
 <body>
-    <h2>Teacher Login</h2>
-    <input type="email" id="email" placeholder="Faculty Email">
+    <h2>Student Login</h2>
+    <input type="email" id="email" placeholder="Student Email">
     <input type="password" id="password" placeholder="Password">
-    <button onclick="login('teacher')">Login as Faculty</button>
+    <button onclick="login('student')">Login as Student</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
@@ -43,10 +44,12 @@
                 const user = userCredential.user;
                 
                 const userDoc = await getDoc(doc(db, "Users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'teacher') {
-                    window.location.href = "teacherdashbord.html"; 
+                if (userDoc.exists() && userDoc.data().role === 'student') {
+                    alert("Student login successful! Redirecting...");
+                    // Redirect to student info page or dashboard
+                    window.location.href = "index.html"; 
                 } else {
-                    alert("Access Denied: Not a Teacher account!");
+                    alert("Access Denied: Use Faculty Portal for Teacher accounts!");
                 }
             } catch (error) {
                 alert(error.message);
