@@ -3,51 +3,13 @@
 <head>
     <title>Student Registration - ALIET</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            background: #f0f2f5; 
-            margin: 0; 
-        }
-        .register-card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
-            width: 350px; 
-            text-align: center;
-        }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f0f2f5; margin: 0; }
+        .register-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 350px; text-align: center; }
         h2 { color: #333; margin-top: 0; }
-        input, select { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 8px 0; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-        }
-        .show-pass-container { 
-            display: flex; 
-            align-items: center; 
-            font-size: 14px; 
-            margin: 5px 0 15px 5px; 
-            color: #444; 
-        }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .show-pass-container { display: flex; align-items: center; font-size: 14px; margin: 5px 0 15px 5px; color: #444; }
         .show-pass-container input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background: #007bff; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 16px;
-        }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
         button:hover { background: #0056b3; }
         .login-link { margin-top: 15px; font-size: 14px; }
         .login-link a { color: #007bff; text-decoration: none; font-weight: bold; }
@@ -59,7 +21,6 @@
     <h2>Student Register</h2>
     <input type="text" id="rollNo" placeholder="Roll Number (e.g. 22A81A...)" required>
     <input type="text" id="fullName" placeholder="Full Name" required>
-    
     <input type="password" id="password" placeholder="Password" required>
     
     <div class="show-pass-container">
@@ -75,8 +36,8 @@
         <option value="MECH">MECH</option>
         <option value="CIVIL">CIVIL</option>
         <option value="IT">IT</option>
-        <option value="CSM">CSM (AI&ML)</option>
-        <option value="CSD">CSD (Data Science)</option>
+        <option value="CSM">CSM</option>
+        <option value="CSD">CSD</option>
     </select>
 
     <select id="year">
@@ -112,13 +73,12 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Dynamic Section Logic based on your counts
     window.updateSections = () => {
         const dept = document.getElementById('dept').value;
         const sectionDrop = document.getElementById('section');
         sectionDrop.innerHTML = '<option value="">Select Section</option>';
         
-        let sections = ['A']; // Default for 1 section depts (EEE, MECH, CIVIL, IT, CSM, CSD)
+        let sections = ['A']; 
         if (dept === "CSE") sections = ['A', 'B', 'C'];
         else if (dept === "ECE") sections = ['A', 'B'];
 
@@ -149,23 +109,14 @@
         }
 
         const hiddenEmail = roll + "@aliet-strategy.com";
-
         try {
             const userCred = await createUserWithEmailAndPassword(auth, hiddenEmail, pass);
             await setDoc(doc(db, "students", roll), {
-                rollNumber: roll,
-                name: name,
-                department: dept,
-                year: year,
-                section: section,
-                uid: userCred.user.uid,
-                createdAt: new Date()
+                rollNumber: roll, name: name, department: dept, year: year, section: section, uid: userCred.user.uid
             });
             alert("Registration Successful!");
             window.location.href = "studentlogin.html";
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
+        } catch (error) { alert("Error: " + error.message); }
     }
 </script>
 </body>

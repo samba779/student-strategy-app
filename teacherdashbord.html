@@ -1,50 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teacher Dashboard - ALIET</title>
+    <title>Faculty Attendance - ALIET</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #eceff1; }
-        .header { background: #800000; color: white; padding: 15px; border-radius: 5px; }
-        .filter-box { margin: 20px 0; background: white; padding: 15px; border-radius: 5px; }
-        select, button { padding: 10px; margin-right: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        select, button { padding: 10px; margin: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background: #1a73e8; color: white; border: none; cursor: pointer; font-weight: bold; }
+        ul { text-align: left; list-style: none; padding: 0; }
+        li { padding: 10px; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Faculty Attendance Portal</h1>
-    </div>
 
-    <div class="filter-box">
-        <h3>Select Class for Attendance</h3>
-        <select id="year">
-            <option>2nd Year</option>
-            <option>3rd Year</option>
-        </select>
-        <select id="section">
-            <option>CSE-A</option>
-            <option>CSE-B</option>
-        </select>
-        <button onclick="fetchStudents()">Show Students</button>
-    </div>
+<div class="container">
+    <h2>Faculty Attendance Portal</h2>
+    <select id="year">
+        <option>Select Year</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+    </select>
+    <select id="section">
+        <option>Select Section</option>
+        <option value="A">Section A</option>
+        <option value="B">Section B</option>
+        <option value="C">Section C</option>
+    </select>
+    <button onclick="fetchStudents()">Show Students</button>
 
-    <div id="student-list" style="background: white; padding: 20px;">
-        <p>Select section and click "Show Students" to load the list.</p>
+    <div id="student-list" style="margin-top: 20px;">
+        <p>Select details to load student list.</p>
     </div>
+</div>
 
-    <script>
-        function fetchStudents() {
-            const section = document.getElementById('section').value;
-            // Demo purpose ki list chupinchadaniki:
-            document.getElementById('student-list').innerHTML = `
-                <h4>Marking Attendance for ${section}</h4>
-                <ul>
-                    <li><input type="checkbox"> 22L11A0501 - Ramesh</li>
-                    <li><input type="checkbox"> 22L11A0502 - Suresh</li>
-                    <li><input type="checkbox"> 22L11A0503 - Mahesh</li>
-                </ul>
-                <button style="background: green; color: white; border: none; padding: 10px;">Submit to DB</button>
-            `;
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw",
+        authDomain: "student-strategy-app.firebaseapp.com",
+        projectId: "student-strategy-app"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.fetchStudents = async () => {
+        const year = document.getElementById('year').value;
+        const section = document.getElementById('section').value;
+        const listDiv = document.getElementById('student-list');
+        listDiv.innerHTML = "<h4>Loading...</h4>";
+
+        const q = query(collection(db, "students"), where("year", "==", year), where("section", "==", section));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            listDiv.innerHTML = "<p>No students found.</p>";
+            return;
         }
-    </script>
+
+        let html = "<ul>";
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            html += `<li><input type="checkbox" class="att" data-roll="${data.rollNumber}"> ${data.rollNumber} - ${data.name}</li>`;
+        });
+        html += `</ul><button onclick="submitAttendance()" style="background:green;">Submit Attendance</button>`;
+        listDiv.innerHTML = html;
+    };
+
+    window.submitAttendance = async () => {
+        const checks = document.querySelectorAll('.att');
+        const present = [];
+        checks.forEach(cb => { if(cb.checked) present.push(cb.getAttribute('data-roll')); });
+
+        try {
+            await addDoc(collection(db, "attendance"), {
+                date: new Date().toLocaleDateString(),
+                present: present,
+                section: document.getElementById('section').value
+            });
+            alert("Saved successfully!");
+        } catch (e) { alert("Error: " + e.message); }
+    };
+</script>
 </body>
 </html>
