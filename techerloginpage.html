@@ -1,58 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Faculty Login - ALIET</title>
+    <title>Teacher Login - ALIET</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; text-align: center; border-top: 5px solid #800000; }
-        h2 { color: #800000; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
-        button { width: 100%; padding: 12px; background: #800000; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        /* Centering the card perfectly on the screen */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background: #f0f2f5; 
+            margin: 0; 
+        }
+        .login-box { 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            width: 320px; 
+            text-align: center;
+        }
+        h2 { color: #333; margin-top: 0; }
+        input { 
+            display: block; 
+            margin: 10px auto; 
+            padding: 12px; 
+            width: 100%; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+        
+        /* Show Password Row Styles */
+        .show-pass-container { 
+            display: flex; 
+            align-items: center; 
+            font-size: 14px; 
+            margin: 5px 0 15px 5px; 
+            color: #444; 
+        }
+        .show-pass-container input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
+        
+        button { 
+            padding: 12px 20px; 
+            background: #28a745; /* Green for Teacher portal */
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            width: 100%; 
+            font-size: 16px;
+        }
+        button:hover { background: #218838; }
+        .back { display:block; margin-top:15px; text-decoration:none; color:#666; font-size:14px; }
     </style>
 </head>
 <body>
-<div class="login-container">
-    <h2>Faculty Portal</h2>
-    <input type="email" id="teacherEmail" placeholder="Faculty Email">
-    <input type="password" id="teacherPassword" placeholder="Password">
-    <button id="loginBtn">Login as Teacher</button>
-    <a href="index.html" style="display:block; margin-top:15px; color:#666; text-decoration:none;">← Back</a>
-</div>
+    <div class="login-box">
+        <h2>Faculty Login</h2>
+        
+        <input type="email" id="teacherEmail" placeholder="Faculty Email">
+        
+        <input type="password" id="password" placeholder="Password">
+        
+        <div class="show-pass-container">
+            <input type="checkbox" id="showPass" onclick="togglePassword()"> 
+            <label for="showPass" style="cursor:pointer;">Show Password</label>
+        </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        <button onclick="loginTeacher()">Login as Faculty</button>
+        
+        <a href="index.html" class="back">← Back to Selection</a>
+    </div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw",
-        authDomain: "student-strategy-app.firebaseapp.com",
-        projectId: "student-strategy-app",
-        storageBucket: "student-strategy-app.firebasestorage.app",
-        messagingSenderId: "435789505197",
-        appId: "1:435789505197:web:b0c757606af38e6c8ddc24",
-        measurementId: "G-YMNLYV3X2N"
-    };
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        // Your project's config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw",
+            authDomain: "student-strategy-app.firebaseapp.com",
+            projectId: "student-strategy-app"
+        };
 
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-        const email = document.getElementById('teacherEmail').value;
-        const password = document.getElementById('teacherPassword').value;
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const docSnap = await getDoc(doc(db, "Users", userCredential.user.uid));
-            if (docSnap.exists() && docSnap.data().role === 'teacher') {
-                window.location.href = "teacherdashbord.html";
-            } else {
-                alert("Unauthorized! Faculty only.");
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Function to toggle password visibility
+        window.togglePassword = () => {
+            const passwordField = document.getElementById("password");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        };
+
+        window.loginTeacher = async () => {
+            const email = document.getElementById('teacherEmail').value.trim();
+            const pass = document.getElementById('password').value;
+
+            if (!email || !pass) {
+                alert("Please enter both Email and Password");
+                return;
             }
-        } catch (error) { alert(error.message); }
-    });
-</script>
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                alert("Login Successful! Welcome Faculty.");
+                window.location.href = "teacherdashbord.html"; 
+            } catch (error) { 
+                alert("Login Error: " + error.message);
+            }
+        };
+    </script>
 </body>
-
 </html>
-
