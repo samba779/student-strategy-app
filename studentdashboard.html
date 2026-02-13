@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard - ALIET</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .dashboard-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        .profile-pic { width: 80px; height: 80px; background: #1a73e8; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 32px; margin: 0 auto 20px; }
+        h2 { color: #333; margin-bottom: 5px; }
+        .info { color: #666; margin-bottom: 20px; font-size: 14px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .logout-btn { margin-top: 25px; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-card">
+    <div class="profile-pic" id="initials">S</div>
+    <h2 id="studentName">Loading...</h2>
+    <p class="info" id="studentRoll">Roll Number</p>
+    
+    <div class="detail-row"><span>Department:</span> <b id="displayDept">-</b></div>
+    <div class="detail-row"><span>Year:</span> <b id="displayYear">-</b></div>
+    <div class="detail-row"><span>Section:</span> <b id="displaySection">-</b></div>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw",
+        authDomain: "student-strategy-app.firebaseapp.com",
+        projectId: "student-strategy-app"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const rollNo = user.email.split('@')[0].toUpperCase();
+            const studentDoc = await getDoc(doc(db, "students", rollNo));
+            
+            if (studentDoc.exists()) {
+                const data = studentDoc.data();
+                document.getElementById('studentName').innerText = data.name;
+                document.getElementById('studentRoll').innerText = data.rollNumber;
+                document.getElementById('displayDept').innerText = data.department;
+                document.getElementById('displayYear').innerText = data.year + " Year";
+                document.getElementById('displaySection').innerText = data.section;
+                document.getElementById('initials').innerText = data.name.charAt(0);
+            }
+        } else {
+            window.location.href = "studentlogin.html";
+        }
+    });
+
+    window.logout = () => {
+        signOut(auth).then(() => { window.location.href = "studentlogin.html"; });
+    };
+</script>
+</body>
+</html>
