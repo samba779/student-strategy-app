@@ -3,9 +3,8 @@
 <head>
     <title>Student Registration - ALIET</title>
     <style>
-        /* Centering the card perfectly */
         body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -28,9 +27,8 @@
             margin: 8px 0; 
             border: 1px solid #ccc; 
             border-radius: 6px; 
-            box-sizing: border-border-box; 
+            box-sizing: border-box; 
         }
-        /* Show Password Row */
         .show-pass-container { 
             display: flex; 
             align-items: center; 
@@ -39,7 +37,6 @@
             color: #444; 
         }
         .show-pass-container input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
-        
         button { 
             width: 100%; 
             padding: 12px; 
@@ -70,13 +67,16 @@
         <label for="showPass" style="cursor:pointer;">Show Password</label>
     </div>
     
-    <select id="dept">
+    <select id="dept" onchange="updateSections()">
         <option value="">Select Department</option>
         <option value="CSE">CSE</option>
         <option value="ECE">ECE</option>
         <option value="EEE">EEE</option>
-        <option value="IT">IT</option>
         <option value="MECH">MECH</option>
+        <option value="CIVIL">CIVIL</option>
+        <option value="IT">IT</option>
+        <option value="CSM">CSM (AI&ML)</option>
+        <option value="CSD">CSD (Data Science)</option>
     </select>
 
     <select id="year">
@@ -87,7 +87,9 @@
         <option value="4">4th Year</option>
     </select>
 
-    <input type="text" id="section" placeholder="Section (A, B, or C)" required>
+    <select id="section">
+        <option value="">Select Section</option>
+    </select>
     
     <button onclick="registerStudent()">Create Account</button>
     <div class="login-link">
@@ -110,14 +112,27 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- The Fixed Show Password Function ---
+    // Dynamic Section Logic based on your counts
+    window.updateSections = () => {
+        const dept = document.getElementById('dept').value;
+        const sectionDrop = document.getElementById('section');
+        sectionDrop.innerHTML = '<option value="">Select Section</option>';
+        
+        let sections = ['A']; // Default for 1 section depts (EEE, MECH, CIVIL, IT, CSM, CSD)
+        if (dept === "CSE") sections = ['A', 'B', 'C'];
+        else if (dept === "ECE") sections = ['A', 'B'];
+
+        sections.forEach(s => {
+            let opt = document.createElement('option');
+            opt.value = s;
+            opt.innerHTML = "Section " + s;
+            sectionDrop.appendChild(opt);
+        });
+    };
+
     window.togglePassword = () => {
         const passwordField = document.getElementById("password");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-        } else {
-            passwordField.type = "password";
-        }
+        passwordField.type = passwordField.type === "password" ? "text" : "password";
     };
 
     window.registerStudent = async () => {
@@ -126,7 +141,7 @@
         const pass = document.getElementById('password').value;
         const dept = document.getElementById('dept').value;
         const year = document.getElementById('year').value;
-        const section = document.getElementById('section').value.toUpperCase().trim();
+        const section = document.getElementById('section').value;
 
         if (!roll || !name || !pass || !dept || !year || !section) {
             alert("Please fill all fields!");
