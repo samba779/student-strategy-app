@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard - ALIET</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #eceff1; }
+        .header { background: #800000; color: white; padding: 15px; border-radius: 5px; }
+        .filter-box { margin: 20px 0; background: white; padding: 15px; border-radius: 5px; }
+        select, button { padding: 10px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Faculty Attendance Portal</h1>
+    </div>
+
+    <div class="filter-box">
+        <h3>Select Class for Attendance</h3>
+        <select id="year">
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+        </select>
+        <select id="section">
+            <option>CSE-A</option>
+            <option>CSE-B</option>
+        </select>
+        <button onclick="fetchStudents()">Show Students</button>
+    </div>
+
+    <div id="student-list" style="background: white; padding: 20px;">
+        <p>Select section and click "Show Students" to load the list.</p>
+    </div>
+
+    <script>
+        function fetchStudents() {
+            const section = document.getElementById('section').value;
+            // Demo purpose ki list chupinchadaniki:
+            document.getElementById('student-list').innerHTML = `
+                <h4>Marking Attendance for ${section}</h4>
+                <ul>
+                    <li><input type="checkbox"> 22L11A0501 - Ramesh</li>
+                    <li><input type="checkbox"> 22L11A0502 - Suresh</li>
+                    <li><input type="checkbox"> 22L11A0503 - Mahesh</li>
+                </ul>
+                <button style="background: green; color: white; border: none; padding: 10px;">Submit to DB</button>
+            `;
+        }
+    </script>
+</body>
+</html>
