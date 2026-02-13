@@ -3,28 +3,57 @@
 <head>
     <title>Student Registration - ALIET</title>
     <style>
-<<<<<<< HEAD
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
-        .register-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 350px; }
-        h2 { text-align: center; color: #333; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        /* Centering the card perfectly */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background: #f0f2f5; 
+            margin: 0; 
+        }
+        .register-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            width: 350px; 
+            text-align: center;
+        }
+        h2 { color: #333; margin-top: 0; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-border-box; 
+        }
+        /* Show Password Row */
+        .show-pass-container { 
+            display: flex; 
+            align-items: center; 
+            font-size: 14px; 
+            margin: 5px 0 15px 5px; 
+            color: #444; 
+        }
+        .show-pass-container input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
         
-        /* Show Password Styling */
-        .show-pass-container { display: flex; align-items: center; font-size: 13px; margin-bottom: 10px; color: #555; }
-        .show-pass-container input { width: auto; margin: 0 5px 0 0; cursor: pointer; }
-        .show-pass-container label { cursor: pointer; }
-
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px;
+        }
         button:hover { background: #0056b3; }
-        p { text-align: center; font-size: 14px; margin-top: 15px; }
-        a { color: #007bff; text-decoration: none; font-weight: bold; }
-=======
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
-        .register-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 350px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #0056b3; }
->>>>>>> 8637296f65293edf95326ce04d18563f5bcde952
+        .login-link { margin-top: 15px; font-size: 14px; }
+        .login-link a { color: #007bff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -33,17 +62,13 @@
     <h2>Student Register</h2>
     <input type="text" id="rollNo" placeholder="Roll Number (e.g. 22A81A...)" required>
     <input type="text" id="fullName" placeholder="Full Name" required>
-<<<<<<< HEAD
     
     <input type="password" id="password" placeholder="Password" required>
-
+    
     <div class="show-pass-container">
         <input type="checkbox" id="showPass" onclick="togglePassword()"> 
-        <label for="showPass">Show Password</label>
+        <label for="showPass" style="cursor:pointer;">Show Password</label>
     </div>
-=======
-    <input type="password" id="password" placeholder="Password" required>
->>>>>>> 8637296f65293edf95326ce04d18563f5bcde952
     
     <select id="dept">
         <option value="">Select Department</option>
@@ -65,7 +90,9 @@
     <input type="text" id="section" placeholder="Section (A, B, or C)" required>
     
     <button onclick="registerStudent()">Create Account</button>
-    <p><a href="studentlogin.html">Already registered? Login here</a></p>
+    <div class="login-link">
+        <a href="studentlogin.html">Already registered? Login here</a>
+    </div>
 </div>
 
 <script type="module">
@@ -73,25 +100,17 @@
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-<<<<<<< HEAD
     const firebaseConfig = {
-        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw", 
-=======
-    // Use your project's Firebase config
-    const firebaseConfig = {
-        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw", // Replace with your new key from Google Cloud
->>>>>>> 8637296f65293edf95326ce04d18563f5bcde952
+        apiKey: "AIzaSyAIgVYLQ-OXUwNtnGvgmY5VtcLr6rqx5Fw",
         authDomain: "student-strategy-app.firebaseapp.com",
-        projectId: "student-strategy-app",
-        storageBucket: "student-strategy-app.firebasestorage.app"
+        projectId: "student-strategy-app"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-<<<<<<< HEAD
-    // Function to Toggle Password Visibility
+    // --- The Fixed Show Password Function ---
     window.togglePassword = () => {
         const passwordField = document.getElementById("password");
         if (passwordField.type === "password") {
@@ -109,29 +128,15 @@
         const year = document.getElementById('year').value;
         const section = document.getElementById('section').value.toUpperCase().trim();
 
-        // Simple Validation
         if (!roll || !name || !pass || !dept || !year || !section) {
-            alert("Please fill in all details.");
+            alert("Please fill all fields!");
             return;
         }
-=======
-    window.registerStudent = async () => {
-        const roll = document.getElementById('rollNo').value.toUpperCase();
-        const name = document.getElementById('fullName').value;
-        const pass = document.getElementById('password').value;
-        const dept = document.getElementById('dept').value;
-        const year = document.getElementById('year').value;
-        const section = document.getElementById('section').value.toUpperCase();
->>>>>>> 8637296f65293edf95326ce04d18563f5bcde952
 
-        // Create a hidden email using the Roll Number
         const hiddenEmail = roll + "@aliet-strategy.com";
 
         try {
-            // 1. Create Auth Account
             const userCred = await createUserWithEmailAndPassword(auth, hiddenEmail, pass);
-            
-            // 2. Save full details to Firestore
             await setDoc(doc(db, "students", roll), {
                 rollNumber: roll,
                 name: name,
@@ -141,18 +146,12 @@
                 uid: userCred.user.uid,
                 createdAt: new Date()
             });
-
-            alert("Registration Successful for " + roll);
+            alert("Registration Successful!");
             window.location.href = "studentlogin.html";
         } catch (error) {
             alert("Error: " + error.message);
         }
     }
 </script>
-
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 8637296f65293edf95326ce04d18563f5bcde952
